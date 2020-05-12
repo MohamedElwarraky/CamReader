@@ -78,6 +78,23 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     public void getTextFromImage(Bitmap bitmap) {
         //TODO: Khaled: read text from image
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        //if couldn't recognize any text
+        if (!textRecognizer.isOperational()) {
+            speak.speak("could not get the text", TextToSpeech.QUEUE_FLUSH, null);
+        } else {
+            // Extract the text from bitmap photo and save the text in array
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+            SparseArray<TextBlock> items = textRecognizer.detect(frame);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < items.size(); ++i) {
+                TextBlock myItem = items.valueAt(i);
+                sb.append(myItem.getValue());
+                sb.append("\n");
+            }
+            //here the output
+            textView.setText(sb.toString());
+        }
     }
 
     @Override
