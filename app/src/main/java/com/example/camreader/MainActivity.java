@@ -100,11 +100,16 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     @Override
     public void onInit(int status) {
         //TODO: Abdallah: implementaion
+        if (status == TextToSpeech.SUCCESS) {
+            speak.setLanguage(Locale.ENGLISH);
+            speak.setOnUtteranceCompletedListener(this);
+        }
     }
 
     @Override
     public void onUtteranceCompleted(String utteranceId) {
         //TODO: Abdallah: implementaion
+        listenBtn.setBackgroundResource(R.drawable.ic_play_arrow_48dp);
     }
 
     public void listen(View view) {
