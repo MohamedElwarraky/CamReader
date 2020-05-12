@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     EditText textView;
     Button listenBtn;
     private TextToSpeech speak;
-
     static final int CAMERA_PIC_REQUEST = 1;
     static final int GALLERY_PIC_REQUEST = 0;
 
@@ -179,7 +178,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     public void listen(View view) {
         //TODO: AHMED_ASHRAF: read text
-
+        String text= textView.getText().toString(); //convert the text to string
+        speak.speak(text,TextToSpeech.QUEUE_FLUSH,null);//play the sound of the string
     }
 
 
