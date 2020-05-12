@@ -1,18 +1,38 @@
 package com.example.camreader;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.speech.tts.TextToSpeech;
+import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener, TextToSpeech.OnUtteranceCompletedListener {
+
+    EditText textView;
+    Button listenBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,15 +41,60 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // get TextView from xml
+        textView = findViewById(R.id.text);
+
+        // get Button in xml
+        listenBtn = findViewById(R.id.listenBtn);
+        listenBtn.setBackgroundResource(R.drawable.ic_play_arrow_48dp);
+
+        //TODO: Ali: intent
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                showPictureDialog();
             }
         });
     }
+
+    private void showPictureDialog() {
+    }
+
+    private void TakePictureIntent() {
+        //TODO: Ali: intent
+    }
+
+    private void GetPictureIntent() {
+        //TODO: Abdallah: implementaion
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //TODO: Ali: intent
+    }
+
+    public void getTextFromImage(Bitmap bitmap) {
+        //TODO: Khaled: read text from image
+    }
+
+    @Override
+    public void onInit(int status) {
+        //TODO: Abdallah: implementaion
+    }
+
+    @Override
+    public void onUtteranceCompleted(String utteranceId) {
+        //TODO: Abdallah: implementaion
+    }
+
+    public void listen(View view) {
+        //TODO: AHMED_ASHRAF: read text
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
