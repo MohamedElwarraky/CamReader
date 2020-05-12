@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     EditText textView;
     Button listenBtn;
+    private TextToSpeech speak;
+
+    static final int CAMERA_PIC_REQUEST = 1;
+    static final int GALLERY_PIC_REQUEST = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +63,48 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         });
     }
 
+
     private void showPictureDialog() {
+        //TODO: Ali: AlertDialog
+        //Create AlertDialog with two items to choose between them
+        // Initialize AlertDialog
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        // Set Title of AlertDialog
+        pictureDialog.setTitle("Select Action");
+        // Array contains the Items to show in Dialog
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera" };
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Switch Case between the two options in the ALertDialog
+                        switch (which) {
+                            case 0:
+                                // Camera option
+                                GetPictureIntent();
+                                break;
+                            case 1:
+                                // Gallery option
+                                TakePictureIntent();
+                                break;
+                        }
+                    }
+                });
+        // Show AlertDialog
+        pictureDialog.show();
     }
+
 
     private void TakePictureIntent() {
         //TODO: Ali: intent
+        //Intent to to open the Camera application on user's phone
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // Start Camera Intent
+            startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+        }
     }
 
     private void GetPictureIntent() {
@@ -72,8 +113,37 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         //TODO: Ali: intent
+        super.onActivityResult(requestCode, resultCode, data);
+        // Switch Case to see if the requestCode is from Camera Intent or Gallery Intent
+        switch (requestCode) {
+            case GALLERY_PIC_REQUEST:
+                if (data != null) {
+                    // Get Data (Image)
+                    Uri contentURI = data.getData();
+                    try {
+                        // Set data to Bitmap Image
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                        // Call TextFromImage function
+                        getTextFromImage(bitmap);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(MainActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case CAMERA_PIC_REQUEST:
+                if(resultCode == RESULT_OK) {
+                    // Get data (Image)
+                    Bundle extras = data.getExtras();
+                    // Set data to Bitmap image
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    // Call TextFromImage function
+                    getTextFromImage(imageBitmap);
+                }
+                break;
+        }
     }
 
     public void getTextFromImage(Bitmap bitmap) {
